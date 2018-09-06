@@ -25,3 +25,16 @@ chmod +x  goproxy.sh
 ```bash
 ./goproxy.sh -l /tmp/myGoProxy -m github.com/pkg/errors -v v0.8.0
 ```
+where;  
+- `l` is the location on disk/file where you want to create the Go module proxy.  
+- `m` is the module you want to add to the module proxy.   
+- `v` is the version of that module that you want to add to the module proxy.     
+
+Then use your Go proxy with your usual Go commands;   
+```bash
+export GOPROXY=file:////tmp/myGoProxy && go get github.com/pkg/errors
+```
+..
+```bash
+export GOPROXY=file:////tmp/myGoProxy && go run main.go
+```

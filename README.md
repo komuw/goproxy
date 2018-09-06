@@ -38,3 +38,5 @@ export GOPROXY=file:////tmp/myGoProxy && go get github.com/pkg/errors
 ```bash
 export GOPROXY=file:////tmp/myGoProxy && go run main.go
 ```
+
+**NB:** it currently only works with modules that are hosted on github.  

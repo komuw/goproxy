@@ -39,4 +39,45 @@ export GOPROXY=file:////tmp/myGoProxy && go get github.com/pkg/errors
 export GOPROXY=file:////tmp/myGoProxy && go run main.go
 ```
 
-**NB:** it currently only works with modules that are hosted on github.  
+**NB:** 
+- It currently only works with modules that are hosted on github.
+- It is an experiment, it works for simple modules but should not be used in production or with code that you care about. Use it only as an inspiration to build upon.
+- It is not feature complete. For example the documentation for the GOPROXY protocol; https://go.dev/ref/mod#goproxy-protocol says:
+```
+To avoid ambiguity when serving from case-insensitive file systems, the $module and $version elements are case-encoded by replacing every uppercase letter with an exclamation mark followed by the corresponding lower-case letter. This allows modules example.com/M and example.com/m to both be stored on disk, since the former is encoded as example.com/!m.
+```
+`goproxy` does not cover this edge case among others.
+- It might be easier to leverage the default Go proxy to create for you a file based proxy;
+```sh
+# A. Using the machine that has internet connection, run these commands:
+
+# Unset the default Golang paths and proxies.
+sudo rm -rf /tmp/myGoProxy/
+mkdir -p /tmp/myGoProxy/
+unset GOPROXY
+unset GOPATH
+
+# Set Golang proxy to the default one.
+# Set GOPATH to a custom path
+export GOPROXY='https://proxy.golang.org,direct'
+export GOPATH=/tmp/myGoProxy/
+
+# Populate our custom GOPATH with modules.
+go mod download
+go mod tidy
+
+# Check that our custom directory has been populated.
+tree /tmp/myGoProxy/pkg/mod/cache/download
+
+# Unset Go env variables
+unset GOPROXY
+unset GOPATH
+
+# B. Copy the `/tmp/myGoProxy/pkg/mod/cache/download` directory to the machine with no internet connection.
+
+# C. Run the following commands in the machine with no internet connection;
+
+# Set proxy to point to our custom directory.
+export GOPROXY='/tmp/myGoProxy/pkg/mod/cache/download'
+go build .  
+```

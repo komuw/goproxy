@@ -44,8 +44,9 @@ export GOPROXY=file:////tmp/myGoProxy && go run main.go
 - It is an experiment, it works for simple modules but should not be used in production or with code that you care about. Use it only as an inspiration to build upon.
 - It is not feature complete. For example the documentation for the GOPROXY protocol; https://go.dev/ref/mod#goproxy-protocol says:
 ```
-To avoid ambiguity when serving from case-insensitive file systems, the $module and $version elements are case-encoded
-by replacing every uppercase letter with an exclamation mark followed by the corresponding lower-case letter.
+To avoid ambiguity when serving from case-insensitive file systems, the $module and $version elements are
+case-encoded by replacing every uppercase letter with an exclamation mark followed by the corresponding
+lower-case letter.
 This allows modules example.com/M and example.com/m to both be stored on disk,
 since the former is encoded as example.com/!m.
 ```
